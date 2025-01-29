@@ -1,0 +1,17 @@
+# SPARQL Query: Find genera in Arachnida ending in 'platys'
+# Author: Richard Littauer
+# Date: 2025-01-30
+# Description: This query retrieves all genera within Arachnida whose names end in "platys".
+# Usage: Can be run in the Wikidata Query Service.
+
+SELECT ?genus ?genusLabel ?taxonName WHERE {
+  ?genus wdt:P105 wd:Q34740;  # Taxon rank: Genus
+         wdt:P171* wd:Q1358.  # Parent taxon: Arachnida
+
+  OPTIONAL { ?genus wdt:P225 ?taxonName }  # Fetch scientific name if available
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+
+  FILTER(REGEX(STR(?taxonName), "platys$", "i")) # Match Latin names ending in "platys"
+}
+
+LIMIT 100
